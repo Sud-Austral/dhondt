@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Login.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -25,6 +26,15 @@ namespace Login.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public JsonResult GetCandidatos(int id)
+        {
+            //var subtemas = db.SUBTEMAS.Where(x => x.TEMA_id == id);
+            DB d = new DB();
+            var subtemas = d.BuscarCandidatosPorDistrito(id);
+            //var subtemas = d.BuscarTest(id);
+            return Json(subtemas, JsonRequestBehavior.AllowGet);
         }
     }
 }

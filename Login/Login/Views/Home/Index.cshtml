@@ -2,30 +2,86 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+<select name="distritos" id="distritos">
+    <option value="1">Distrito 1</option>
+    <option value="2">Distrito 2</option>
+    <option value="3">Distrito 3</option>
+    <option value="24">Distrito 24</option>
+</select>
+
+<table id ="candidatosTable" style="width:100%">
+    <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Age</th>
+    </tr>
+    <tr>
+        <td>Jill</td>
+        <td>Smith</td>
+        <td>50</td>
+    </tr>
+    <tr>
+        <td>Eve</td>
+        <td>Jackson</td>
+        <td>94</td>
+    </tr>
+</table>
+<input type="button" value="Click me" id="Calcular">
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        /*Con esta función al seleccionar un valor en el DropdownList Tema se rellenará automaticamente
+         * el DropdownList de subtemas con los subtemas relacionados al Tema seleccionado
+        */
+
+        $(document).ready(function () {
+            $("#distritos").change(function () {
+                //alert("Hola");
+                
+                $.get("/Home/GetCandidatos", { id: $("#distritos").val() }, function (data) {
+                    // VACIAMOS EL DropDownList
+                    $("#candidatosTable").empty();
+                    // AÑADIMOS UN NUEVO label CON EL NOMBRE DEL ELEMENTO SELECCIONADO
+                    //$("#candidatos").append("<option value> Seleccionar Subtemas de " + $("#distritos option:selected").text() + " --</option>")
+                    $("#candidatosTable").append("<tr>"+ 
+                        "<th> Nombre</th>" +
+                        "<th>Lista</th>" +
+                        "<th>Partido</th>" +
+                        "<th>Sigla</th>" +  
+                        "<th>Distrito</th>" +  
+                        "<th>Votos</th>" + 
+                        "</tr > ")
+                    // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
+                    $.each(data, function (index, row) {
+                        $("#candidatosTable").append("<tr>" +
+                            "<td>" + row.NOMBRE + "</td>" +
+                            "<td>" + row.LISTA + "</td>" +
+                            "<td>" + row.PARTIDO + "</td>" +
+                            "<td>" + row.PARTIDOCORTO + "</td>" +
+                            "<td>" + row.DISTRITO + "</td>" +
+                            "<td> <input type='number' min='0'> </td>" +
+                            "</tr>")
+                    });
+                });
+                
+            });
+        });
+
+        $(document).ready(function () {
+            $("#Calcular").click(function () {
+                var table = document.getElementById("candidatosTable");
+                for (var i = 1, row; row = table.rows[i]; i++)
+                {
+                    alert(row.cells[0].innerHTML + row.cells[1].innerHTML + row.cells[2].innerHTML + row.cells[3].innerHTML + row.cells[4].innerHTML + row.cells[5].innerHTML)
+                    for (var j = 0, col; col = row.cells[j]; j++)
+                    {
+                        //alert(col.innerHTML);
+                    } 
+                }
+
+            });
+        });
+    </script>
+}
