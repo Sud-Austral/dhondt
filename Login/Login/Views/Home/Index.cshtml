@@ -5,28 +5,15 @@
 
 
 <select name="distritos" id="distritos">
+    <option value="0">Distrito 1</option>
     <option value="1">Distrito 1</option>
     <option value="2">Distrito 2</option>
     <option value="3">Distrito 3</option>
     <option value="24">Distrito 24</option>
 </select>
 
-<table id ="candidatosTable" style="width:100%">
-    <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Age</th>
-    </tr>
-    <tr>
-        <td>Jill</td>
-        <td>Smith</td>
-        <td>50</td>
-    </tr>
-    <tr>
-        <td>Eve</td>
-        <td>Jackson</td>
-        <td>94</td>
-    </tr>
+<table class="table" id ="candidatosTable" style="width:100%;">
+ 
 </table>
 <input type="button" value="Click me" id="Calcular">
 
@@ -89,7 +76,7 @@
                     $("#candidatosTable").empty();
                     // AÑADIMOS UN NUEVO label CON EL NOMBRE DEL ELEMENTO SELECCIONADO
                     //$("#candidatos").append("<option value> Seleccionar Subtemas de " + $("#distritos option:selected").text() + " --</option>")
-                    $("#candidatosTable").append("<tr>"+ 
+                    $("#candidatosTable").append("<tr style='background-color:red'>"+ 
                         "<th> Nombre</th>" +
                         "<th>Lista</th>" +
                         "<th>Partido</th>" +
@@ -100,7 +87,7 @@
                     // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
                     $.each(data, function (index, row) {
                         $("#candidatosTable").append("<tr>" +
-                            "<td>" + row.NOMBRE + "</td>" +
+                            "<td style='background-color:blue'>" + row.NOMBRE + "</td>" +
                             "<td>" + row.LISTA + "</td>" +
                             "<td>" + row.PARTIDO + "</td>" +
                             "<td>" + row.PARTIDOCORTO + "</td>" +
@@ -127,10 +114,12 @@
                         Listas.push(row.cells[1].innerHTML);
                     }
                     indx++;
+                       /*
                     for (var j = 0, col; col = row.cells[j]; j++)
                     {
                         //alert(col.innerHTML);
                     } 
+                    */
                 }
                 //alert(ListaCandidatos[0].Nombre);
                 //alert(ListaCandidatos[0].Lista);
