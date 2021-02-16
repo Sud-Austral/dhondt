@@ -8,10 +8,12 @@ namespace Login.Models
     public class DB
     {
         public List<Candidato> candidatos { get; set; }
+        public List<Distritos> distritos { get; set; }
 
         public DB()
         {
             this.candidatos = new List<Candidato>();
+            this.distritos = new List<Distritos>();
             this.candidatos.Add(new Candidato("ELISA AMANDA GIUSTINIANOVICH CAMPOS ", "COORDINADORA SOCIAL DE MAGALLANES", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 28"));
             this.candidatos.Add(new Candidato("PABLO NICOLAS CIFUENTES VLADILO ", "COORDINADORA SOCIAL DE MAGALLANES", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 28"));
             this.candidatos.Add(new Candidato("INES ELIZABETH VIDAL ANDRADE ", "COORDINADORA SOCIAL DE MAGALLANES", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 28"));
