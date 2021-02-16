@@ -3,41 +3,60 @@
 }
 
 
+<div class="row">
 
-<select name="distritos" id="distritos">
-    <option value="1">Distrito 1</option>
-    <option value="2">Distrito 2</option>
-    <option value="3">Distrito 3</option>
-    <option value="24">Distrito 24</option>
-</select>
+    <div class="col-xl-2" style=" background-color:transparent">
+        <p>Seleccione un distrito</p>
+    </div>
+    <div class="col-xl-5" style="background-color:transparent">
+        <select name="distritos" id="distritos">
+            <option value="0">-Elegir-</option>
+            <option value="1">Distrito 1</option>
+            <option value="2">Distrito 2</option>
+            <option value="3">Distrito 3</option>
+            <option value="2">Distrito 4</option>
+            <option value="3">Distrito 5</option>
+            <option value="1">Distrito 6</option>
+            <option value="2">Distrito 7</option>
+            <option value="3">Distrito 8</option>
+            <option value="2">Distrito 9</option>
+            <option value="3">Distrito 10</option>
+            <option value="1">Distrito 11</option>
+            <option value="2">Distrito 12</option>
+            <option value="3">Distrito 13</option>
+            <option value="2">Distrito 14</option>
+            <option value="3">Distrito 15</option>
+            <option value="1">Distrito 16</option>
+            <option value="2">Distrito 17</option>
+            <option value="3">Distrito 18</option>
+            <option value="2">Distrito 19</option>
+            <option value="3">Distrito 20</option>
+            <option value="3">Distrito 21</option>
+            <option value="2">Distrito 22</option>
+            <option value="3">Distrito 23</option>
+            <option value="2">Distrito 24</option>
+            <option value="3">Distrito 25</option>
+            <option value="1">Distrito 26</option>
+            <option value="2">Distrito 27</option>
+            <option value="24">Distrito 28</option>
+        </select>
+    </div>
+    <div class="col-xl-7" style="background-color:transparent">
+    </div>
+</div>
 
-<table id ="candidatosTable" style="width:100%">
-    <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Age</th>
-    </tr>
-    <tr>
-        <td>Jill</td>
-        <td>Smith</td>
-        <td>50</td>
-    </tr>
-    <tr>
-        <td>Eve</td>
-        <td>Jackson</td>
-        <td>94</td>
-    </tr>
+<p>Llenar con resultados de prueba la columna Votos</p>
+<table class="table" id="candidatosTable" style="width:100%;">
 </table>
-<input type="button" value="Click me" id="Calcular">
+<input type="button" value="Resultados" id="Calcular">
 
 <table id="resultado" style="width:100%">
-
 </table>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
         class Candidato {
-            
+
             constructor(Nombre, Lista, Partido, Sigla, Distrito, Voto) {
                 this.Nombre = Nombre;
                 this.Lista = Lista;
@@ -54,7 +73,7 @@
         }
 
         class CandidatoFinal {
-            
+
             constructor(Nombre, Lista, Partido, Sigla, Distrito, Voto, VotoLista, VotoFinal) {
                 this.Candidato = new Candidato(Nombre, Lista, Partido, Sigla, Distrito, Voto);
                 this.VotoLista = VotoLista;
@@ -83,19 +102,19 @@
         $(document).ready(function () {
             $("#distritos").change(function () {
                 //alert("Hola");
-                
+
                 $.get("/Home/GetCandidatos", { id: $("#distritos").val() }, function (data) {
                     // VACIAMOS EL DropDownList
                     $("#candidatosTable").empty();
                     // AÑADIMOS UN NUEVO label CON EL NOMBRE DEL ELEMENTO SELECCIONADO
                     //$("#candidatos").append("<option value> Seleccionar Subtemas de " + $("#distritos option:selected").text() + " --</option>")
-                    $("#candidatosTable").append("<tr>"+ 
+                    $("#candidatosTable").append("<tr style='background-color:#FF685B'>" +
                         "<th> Nombre</th>" +
                         "<th>Lista</th>" +
                         "<th>Partido</th>" +
-                        "<th>Sigla</th>" +  
-                        "<th>Distrito</th>" +  
-                        "<th>Votos</th>" + 
+                        "<th>Sigla</th>" +
+                        "<th>Distrito</th>" +
+                        "<th>Votos</th>" +
                         "</tr > ")
                     // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
                     $.each(data, function (index, row) {
@@ -109,7 +128,7 @@
                             "</tr>")
                     });
                 });
-                
+
             });
         });
 
@@ -117,20 +136,21 @@
             $("#Calcular").click(function () {
                 var table = document.getElementById("candidatosTable");
                 var indx = 0;
-                
-                for (var i = 1, row; row = table.rows[i]; i++)
-                {
+
+                for (var i = 1, row; row = table.rows[i]; i++) {
                     ListaCandidatos.push(new Candidato(row.cells[0].innerHTML, row.cells[1].innerHTML, row.cells[2].innerHTML, row.cells[3].innerHTML, row.cells[4].innerHTML, document.getElementsByTagName("input")[indx].value));
-                   
+
                     //alert(row.cells[0].innerHTML + row.cells[1].innerHTML + row.cells[2].innerHTML + row.cells[3].innerHTML + row.cells[4].innerHTML + document.getElementsByTagName("input")[indx].value)
                     if (Listas.indexOf(row.cells[1].innerHTML) == -1) {
                         Listas.push(row.cells[1].innerHTML);
                     }
                     indx++;
-                    for (var j = 0, col; col = row.cells[j]; j++)
-                    {
-                        //alert(col.innerHTML);
-                    } 
+                    /*
+                 for (var j = 0, col; col = row.cells[j]; j++)
+                 {
+                     //alert(col.innerHTML);
+                 }
+                 */
                 }
                 //alert(ListaCandidatos[0].Nombre);
                 //alert(ListaCandidatos[0].Lista);
@@ -161,7 +181,7 @@
                         acumulador = acumulador + fila2.Voto;
                         //alert(acumulador)
                         ListaAux.push(fila2.Nombre)
-                        
+
                     }
 
                     ListaConCandidatos.push(new Lista(fila, acumulador, found.sort((a, b) => (a.Voto > b.Voto) ? -1 : 1)));
@@ -178,9 +198,9 @@
                         //alert(fila2.Nombre)
                         //fila2.Voto = Math.round(fila.Votos / (j + 1));
                         ListaFinal.push(new CandidatoFinal(fila2.Nombre, fila2.Lista, fila2.Partido, fila2.Sigla, fila2.Distrito, fila2.Voto, fila.Votos, Math.round(fila.Votos / (j + 1))));
-                    }                    
+                    }
                 }
-                
+
                 for (var i = 0, fila; fila = ListaFinal.sort((a, b) => (a.VotoFinal > b.VotoFinal) ? -1 : 1)[i]; i++) {
                     $("#resultado").append("<tr>" +
                         "<td>" + fila.Candidato.Nombre + "</td>" +
