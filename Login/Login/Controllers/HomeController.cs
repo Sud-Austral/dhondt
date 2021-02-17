@@ -9,6 +9,9 @@ namespace Login.Controllers
 {
     public class HomeController : Controller
     {
+        
+        DB d = new DB();    
+
         public ActionResult Index()
         {
             return View();
@@ -31,8 +34,17 @@ namespace Login.Controllers
         public JsonResult GetCandidatos(int id)
         {
             //var subtemas = db.SUBTEMAS.Where(x => x.TEMA_id == id);
-            DB d = new DB();
+            //DB d = new DB();
             var subtemas = d.BuscarCandidatosPorDistrito(id);
+            //var subtemas = d.BuscarTest(id);
+            return Json(subtemas, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetDistrito(string id)
+        {
+            //var subtemas = db.SUBTEMAS.Where(x => x.TEMA_id == id);
+            //DB d = new DB();
+            var subtemas = d.BuscarDistrito(id);
             //var subtemas = d.BuscarTest(id);
             return Json(subtemas, JsonRequestBehavior.AllowGet);
         }

@@ -703,7 +703,7 @@ namespace Login.Models
             this.candidatos.Add(new Candidato("BLANCA SOLEDAD OÑATE PIUTRIN ", "ENERGIA INDEPENDIENTE", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 11"));
             this.candidatos.Add(new Candidato("DIEGO BRAVO MORALES  ", "CANDIDATURA INDEPENDIENTE", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 11"));
             this.candidatos.Add(new Candidato("FRANCISCO ORREGO BAUZA  ", "CANDIDATURA INDEPENDIENTE", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 11"));
-            this.candidatos.Add(new Candidato("BOYSLOEB    ", "CANDIDATURA INDEPENDIENTE", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 11"));
+            this.candidatos.Add(new Candidato("HENRY BOYS LOEB    ", "CANDIDATURA INDEPENDIENTE", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 11"));
             this.candidatos.Add(new Candidato("MARIA ELENA GUAJARDO MORAGA ", "PARTIDO ECOLOGISTA VERDE", "PARTIDO ECOLOGISTA VERDE", "PEV", "DISTRITO 10"));
             this.candidatos.Add(new Candidato("GREGORIO MANUEL AUGUSTO CORREA SALINAS", "PARTIDO ECOLOGISTA VERDE", "PARTIDO ECOLOGISTA VERDE", "PEV", "DISTRITO 10"));
             this.candidatos.Add(new Candidato("ANGELICA YEVENES ARANDA  ", "PARTIDO ECOLOGISTA VERDE", "PARTIDO ECOLOGISTA VERDE", "PEV", "DISTRITO 10"));
@@ -1206,6 +1206,34 @@ namespace Login.Models
             this.candidatos.Add(new Candidato("RODRIGO LEONARDO MUÑOZ PONCE ", "CANDIDATURA INDEPENDIENTE", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 01"));
             this.candidatos.Add(new Candidato("ROMINA ALEJANDRA LE BLANC AMPUERO", "CANDIDATURA INDEPENDIENTE", "INDEPENDIENTES", "INDEPENDIENTES", "DISTRITO 01"));
 
+            this.distritos.Add(new Distritos("DISTRITO 01", 2));
+            this.distritos.Add(new Distritos("DISTRITO 02", 2));
+            this.distritos.Add(new Distritos("DISTRITO 03", 2));
+            this.distritos.Add(new Distritos("DISTRITO 04", 2));
+            this.distritos.Add(new Distritos("DISTRITO 05", 2));
+            this.distritos.Add(new Distritos("DISTRITO 06", 2));
+            this.distritos.Add(new Distritos("DISTRITO 07", 2));
+            this.distritos.Add(new Distritos("DISTRITO 08", 2));
+            this.distritos.Add(new Distritos("DISTRITO 09", 2));
+            this.distritos.Add(new Distritos("DISTRITO 10", 2));
+            this.distritos.Add(new Distritos("DISTRITO 11", 2));
+            this.distritos.Add(new Distritos("DISTRITO 12", 2));
+            this.distritos.Add(new Distritos("DISTRITO 13", 2));
+            this.distritos.Add(new Distritos("DISTRITO 14", 2));
+            this.distritos.Add(new Distritos("DISTRITO 15", 2));
+            this.distritos.Add(new Distritos("DISTRITO 16", 2));
+            this.distritos.Add(new Distritos("DISTRITO 17", 2));
+            this.distritos.Add(new Distritos("DISTRITO 18", 2));
+            this.distritos.Add(new Distritos("DISTRITO 19", 2));
+            this.distritos.Add(new Distritos("DISTRITO 20", 2));
+            this.distritos.Add(new Distritos("DISTRITO 21", 2));
+            this.distritos.Add(new Distritos("DISTRITO 22", 2));
+            this.distritos.Add(new Distritos("DISTRITO 23", 2));
+            this.distritos.Add(new Distritos("DISTRITO 24", 2));
+            this.distritos.Add(new Distritos("DISTRITO 25", 2));
+            this.distritos.Add(new Distritos("DISTRITO 26", 2));
+            this.distritos.Add(new Distritos("DISTRITO 27", 2));
+            this.distritos.Add(new Distritos("DISTRITO 27", 2));
 
         }
 
@@ -1231,6 +1259,23 @@ namespace Login.Models
             salida.Add("2");
             salida.Add("3");
             salida.Add("4");
+            return salida;
+        }
+
+        public Distritos BuscarDistrito(string distrito)
+        {
+            /*
+            string distritoString = "DISTRITO ";
+            if (distrito < 10)
+            {
+                distritoString = distritoString + "0" + distrito.ToString();
+            }
+            else
+            {
+                distritoString = distritoString + distrito.ToString();
+            }
+            */
+            Distritos salida = this.distritos.Where(x => x.NOMBRE == distrito).First();
             return salida;
         }
     }

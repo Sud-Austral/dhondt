@@ -52,7 +52,7 @@
 <br>
 <br>
 <br>
-<table id="resultado" style="width:100%">
+<table id="resultado" style="width:100%;">
 </table>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -137,6 +137,8 @@
        
         $(document).ready(function () {
             $("#Calcular").click(function () {
+                var numeroEscanios = 0;
+                var distrito;
                 ListaCandidatos = [];
                 Listas = []; //array.indexOf(2)
                 ListaConCandidatos = [];
@@ -149,6 +151,7 @@
 
                     //alert(row.cells[0].innerHTML + row.cells[1].innerHTML + row.cells[2].innerHTML + row.cells[3].innerHTML + row.cells[4].innerHTML + document.getElementsByTagName("input")[indx].value)
                     if (Listas.indexOf(row.cells[1].innerHTML) == -1) {
+                        distrito = row.cells[4].innerHTML;
                         Listas.push(row.cells[1].innerHTML);
                     }
                     indx++;
@@ -159,6 +162,9 @@
                  }
                  */
                 }
+                //alert(distrito);
+                
+                
                 //alert(ListaCandidatos[0].Nombre);
                 //alert(ListaCandidatos[0].Lista);
                 //alert(ListaCandidatos[0].Partido);
@@ -199,38 +205,53 @@
                 //alert(ListaConCandidatos[0].Candidatos[0]);
                 //alert(ListaAux[0].Nombre);
                 //alert(ListaCandidatos.filter(element => element.Partido == ListaConCandidatos[0].Nombre)[0].Nombre);
-                $("#resultado").empty();
-                for (var i = 0, fila; fila = ListaConCandidatos.sort((a, b) => (a.Voto > b.Voto) ? -1 : 1)[i]; i++) {
-                    for (var j = 0, fila2; fila2 = fila.Candidatos[j]; j++) {
-                        //alert(fila2.Nombre)
-                        //fila2.Voto = Math.round(fila.Votos / (j + 1));
-                        ListaFinal.push(new CandidatoFinal(fila2.Nombre, fila2.Lista, fila2.Partido, fila2.Sigla, fila2.Distrito, fila2.Voto, fila.Votos, Math.round(fila.Votos / (j + 1))));
+               
+
+                $.get("/Home/GetDistrito", { id: distrito }, function (data) {
+                    numeroEscanios = parseInt(data.ESCANIOS);
+                    alert(numeroEscanios);
+
+                    $("#resultado").empty();
+                    for (var i = 0, fila; fila = ListaConCandidatos.sort((a, b) => (a.Voto > b.Voto) ? -1 : 1)[i]; i++) {
+                        for (var j = 0, fila2; fila2 = fila.Candidatos[j]; j++) {
+                            //alert(fila2.Nombre)
+                            //fila2.Voto = Math.round(fila.Votos / (j + 1));
+                            ListaFinal.push(new CandidatoFinal(fila2.Nombre, fila2.Lista, fila2.Partido, fila2.Sigla, fila2.Distrito, fila2.Voto, fila.Votos, Math.round(fila.Votos / (j + 1))));
+                        }
                     }
-                }
-          
-                $("#resultado").append("<tr style='background-color:#FF685B'>" +
-                    
-                    "<th> Nombre</th>" +
-                    "<th>Lista</th>" +
-                    "<th>Votos</th>" +
-                    "<th>Votos de la lista</th>" +
-                    "<th>Votos asignados</th>" +
-                    "</tr > ")
-                for (var i = 0, fila; fila = ListaFinal.sort((a, b) => (a.VotoFinal > b.VotoFinal) ? -1 : 1)[i]; i++) {
-                  
-                    $("#resultado").append("<tr>" +
-                        "<td>" + fila.Candidato.Nombre + "</td>" +
-                        "<td>" + fila.Candidato.Lista + "</td>" +
-                        "<td>" + fila.Candidato.Voto + "</td>" +
-                        "<td>" + fila.VotoLista + "</td>" +
-                        "<td>" + fila.VotoFinal + "</td>" +
-                        /*
-                        "<td>" + row.PARTIDOCORTO + "</td>" +
-                        "<td>" + row.DISTRITO + "</td>" +
-                        "<td> <input id='numero' type='number' min='0'> </td>" +
-                        */
-                        "</tr>");
-                }
+
+                    $("#resultado").append("<tr style='background-color:#FF685B'>" +
+
+                        "<th> Nombre</th>" +
+                        "<th>Lista</th>" +
+                        "<th>Votos</th>" +
+                        "<th>Votos de la lista</th>" +
+                        "<th>Votos asignados</th>" +
+                        "</tr > ")
+                    for (var i = 0, fila; fila = ListaFinal.sort((a, b) => (a.VotoFinal > b.VotoFinal) ? -1 : 1)[i]; i++) {
+                        var style = "";
+                        if (numeroEscanios > i) {
+                            style = "style='background-color:red'"
+                        }
+                        $("#resultado").append("<tr " + style +">" +
+                            "<td>" + fila.Candidato.Nombre + "</td>" +
+                            "<td>" + fila.Candidato.Lista + "</td>" +
+                            "<td>" + fila.Candidato.Voto + "</td>" +
+                            "<td>" + fila.VotoLista + "</td>" +
+                            "<td>" + fila.VotoFinal + "</td>" +
+                            /*
+                            "<td>" + row.PARTIDOCORTO + "</td>" +
+                            "<td>" + row.DISTRITO + "</td>" +
+                            "<td> <input id='numero' type='number' min='0'> </td>" +
+                            */
+                            "</tr>");
+                    }
+                });
+               
+
+               
+
+                
                 /*
                 var aux = new CandidatoFinal("Nombre", "Lista", "Partido", "Sigla", "Distrito", 2, 3, 4);
                 alert(aux.Candidato.Nombre);
