@@ -14,42 +14,44 @@
             <option value="1">Distrito 1</option>
             <option value="2">Distrito 2</option>
             <option value="3">Distrito 3</option>
-            <option value="2">Distrito 4</option>
-            <option value="3">Distrito 5</option>
-            <option value="1">Distrito 6</option>
-            <option value="2">Distrito 7</option>
-            <option value="3">Distrito 8</option>
-            <option value="2">Distrito 9</option>
-            <option value="3">Distrito 10</option>
-            <option value="1">Distrito 11</option>
-            <option value="2">Distrito 12</option>
-            <option value="3">Distrito 13</option>
-            <option value="2">Distrito 14</option>
-            <option value="3">Distrito 15</option>
-            <option value="1">Distrito 16</option>
-            <option value="2">Distrito 17</option>
-            <option value="3">Distrito 18</option>
-            <option value="2">Distrito 19</option>
-            <option value="3">Distrito 20</option>
-            <option value="3">Distrito 21</option>
-            <option value="2">Distrito 22</option>
-            <option value="3">Distrito 23</option>
-            <option value="2">Distrito 24</option>
-            <option value="3">Distrito 25</option>
-            <option value="1">Distrito 26</option>
-            <option value="2">Distrito 27</option>
-            <option value="24">Distrito 28</option>
+            <option value="4">Distrito 4</option>
+            <option value="5">Distrito 5</option>
+            <option value="6">Distrito 6</option>
+            <option value="7">Distrito 7</option>
+            <option value="8">Distrito 8</option>
+            <option value="9">Distrito 9</option>
+            <option value="10">Distrito 10</option>
+            <option value="11">Distrito 11</option>
+            <option value="12">Distrito 12</option>
+            <option value="13">Distrito 13</option>
+            <option value="14">Distrito 14</option>
+            <option value="15">Distrito 15</option>
+            <option value="16">Distrito 16</option>
+            <option value="17">Distrito 17</option>
+            <option value="18">Distrito 18</option>
+            <option value="19">Distrito 19</option>
+            <option value="20">Distrito 20</option>
+            <option value="21">Distrito 21</option>
+            <option value="22">Distrito 22</option>
+            <option value="23">Distrito 23</option>
+            <option value="24">Distrito 24</option>
+            <option value="25">Distrito 25</option>
+            <option value="26">Distrito 26</option>
+            <option value="27">Distrito 27</option>
+            <option value="28">Distrito 28</option>
         </select>
     </div>
     <div class="col-xl-7" style="background-color:transparent">
     </div>
 </div>
 
-<p>Llenar con resultados de prueba la columna Votos</p>
+<p id="texto"></p>
 <table class="table" id="candidatosTable" style="width:100%;">
 </table>
 <input type="button" value="Resultados" id="Calcular">
-
+<br>
+<br>
+<br>
 <table id="resultado" style="width:100%">
 </table>
 @section Scripts {
@@ -102,7 +104,8 @@
         $(document).ready(function () {
             $("#distritos").change(function () {
                 //alert("Hola");
-
+                $("#texto").empty();
+                $("#texto").append("Llenar con resultados de prueba la columna Votos");
                 $.get("/Home/GetCandidatos", { id: $("#distritos").val() }, function (data) {
                     // VACIAMOS EL DropDownList
                     $("#candidatosTable").empty();
@@ -131,9 +134,13 @@
 
             });
         });
-
+       
         $(document).ready(function () {
             $("#Calcular").click(function () {
+                ListaCandidatos = [];
+                Listas = []; //array.indexOf(2)
+                ListaConCandidatos = [];
+                ListaFinal = [];
                 var table = document.getElementById("candidatosTable");
                 var indx = 0;
 
@@ -200,8 +207,17 @@
                         ListaFinal.push(new CandidatoFinal(fila2.Nombre, fila2.Lista, fila2.Partido, fila2.Sigla, fila2.Distrito, fila2.Voto, fila.Votos, Math.round(fila.Votos / (j + 1))));
                     }
                 }
-
+          
+                $("#resultado").append("<tr style='background-color:#FF685B'>" +
+                    
+                    "<th> Nombre</th>" +
+                    "<th>Lista</th>" +
+                    "<th>Votos</th>" +
+                    "<th>Votos de la lista</th>" +
+                    "<th>Votos asignados</th>" +
+                    "</tr > ")
                 for (var i = 0, fila; fila = ListaFinal.sort((a, b) => (a.VotoFinal > b.VotoFinal) ? -1 : 1)[i]; i++) {
+                  
                     $("#resultado").append("<tr>" +
                         "<td>" + fila.Candidato.Nombre + "</td>" +
                         "<td>" + fila.Candidato.Lista + "</td>" +
