@@ -209,7 +209,7 @@
 
                 $.get("/Home/GetDistrito", { id: distrito }, function (data) {
                     numeroEscanios = parseInt(data.ESCANIOS);
-                    alert(numeroEscanios);
+                    //alert(numeroEscanios);
 
                     $("#resultado").empty();
                     for (var i = 0, fila; fila = ListaConCandidatos.sort((a, b) => (a.Voto > b.Voto) ? -1 : 1)[i]; i++) {
