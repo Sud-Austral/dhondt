@@ -1253,6 +1253,11 @@ namespace Login.Models
             return salida;
         }
 
+        public List<Candidato> ALL()
+        {
+            return this.candidatos;
+        }
+
         public List<string> BuscarTest(int distrito)
         {
             List<string> salida = new List<string>();

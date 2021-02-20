@@ -48,5 +48,13 @@ namespace Login.Controllers
             //var subtemas = d.BuscarTest(id);
             return Json(subtemas, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult ALL()
+        {
+            //var subtemas = d.BuscarTest(id);
+            return Json(d.ALL(), JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

@@ -2,14 +2,36 @@
     ViewBag.Title = "Home Page";
 }
 
+<div class="row">
+    <div class="col">
+        <img src="~/Image/banner.jfif" />
+    </div>
+</div>
+<div class="row">
+    <div class="col offset-2">
+        <br />
+        <h2 class="text-center">Simulador de Resultados de Elecciones de Constituyentes</h2>
+        <br />
+        <br />
+    </div>
+</div>
+<style>
+    .select::after {
+        content: "";
+        width: 0.8em;
+        height: 0.5em;
+        background-color: var(--select-arrow);
+        clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    }
+</style>
 
 <div class="row">
 
     <div class="col-xl-2" style=" background-color:transparent">
-        <p>Seleccione un distrito</p>
+        <label class="col-form-label">Seleccione un distrito</label>
     </div>
     <div class="col-xl-5" style="background-color:transparent">
-        <select name="distritos" id="distritos">
+        <select class="form-control" name="distritos" id="distritos">
             <option value="0">-Elegir-</option>
             <option value="1">Distrito 1</option>
             <option value="2">Distrito 2</option>
@@ -46,14 +68,16 @@
 </div>
 
 <p id="texto"></p>
-<table class="table" id="candidatosTable" style="width:100%;">
-</table>
+<table class="table table-striped table-borderless" id="candidatosTable" style="width:115%;"></table>
 <input type="button" value="Resultados" id="Calcular">
 <br>
 <br>
 <br>
-<table id="resultado" style="width:100%;">
-</table>
+<table id="resultadoPreliminar" style="width:115%;" class=""></table>
+<br>
+<br>
+<br>
+<table id="resultado" style="width:115%;" ></table>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
@@ -105,13 +129,13 @@
             $("#distritos").change(function () {
                 //alert("Hola");
                 $("#texto").empty();
-                $("#texto").append("Llenar con resultados de prueba la columna Votos");
+                //$("#texto").append("Llenar con resultados de prueba la columna Votos");
                 $.get("/Home/GetCandidatos", { id: $("#distritos").val() }, function (data) {
                     // VACIAMOS EL DropDownList
                     $("#candidatosTable").empty();
                     // AÑADIMOS UN NUEVO label CON EL NOMBRE DEL ELEMENTO SELECCIONADO
                     //$("#candidatos").append("<option value> Seleccionar Subtemas de " + $("#distritos option:selected").text() + " --</option>")
-                    $("#candidatosTable").append("<tr style='background-color:#FF685B'>" +
+                    $("#candidatosTable").append("<tr style='background-color:#C9C9C9' class='text-center'>" +
                         "<th> Nombre</th>" +
                         "<th>Lista</th>" +
                         "<th>Partido</th>" +
@@ -121,7 +145,7 @@
                         "</tr > ")
                     // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
                     $.each(data, function (index, row) {
-                        $("#candidatosTable").append("<tr>" +
+                        $("#candidatosTable").append("<tr class=''>" +
                             "<td>" + row.NOMBRE + "</td>" +
                             "<td>" + row.LISTA + "</td>" +
                             "<td>" + row.PARTIDO + "</td>" +
@@ -134,7 +158,7 @@
 
             });
         });
-       
+
         $(document).ready(function () {
             $("#Calcular").click(function () {
                 var numeroEscanios = 0;
@@ -163,8 +187,8 @@
                  */
                 }
                 //alert(distrito);
-                
-                
+
+
                 //alert(ListaCandidatos[0].Nombre);
                 //alert(ListaCandidatos[0].Lista);
                 //alert(ListaCandidatos[0].Partido);
@@ -205,7 +229,7 @@
                 //alert(ListaConCandidatos[0].Candidatos[0]);
                 //alert(ListaAux[0].Nombre);
                 //alert(ListaCandidatos.filter(element => element.Partido == ListaConCandidatos[0].Nombre)[0].Nombre);
-               
+
 
                 $.get("/Home/GetDistrito", { id: distrito }, function (data) {
                     numeroEscanios = parseInt(data.ESCANIOS);
@@ -220,7 +244,7 @@
                         }
                     }
 
-                    $("#resultado").append("<tr style='background-color:#FF685B'>" +
+                    $("#resultado").append("<tr style='background-color:#C9C9C9' class='text-center'>" +
 
                         "<th> Nombre</th>" +
                         "<th>Lista</th>" +
@@ -228,17 +252,42 @@
                         "<th>Votos de la lista</th>" +
                         "<th>Votos asignados</th>" +
                         "</tr > ")
+                    $("#resultadoPreliminar").append("<tr style='background-color:#C9C9C9' class='text-center'>>" +
+
+                        "<th> Nombre</th>" +
+                        "<th>Lista</th>" +
+                        "<th>Votos</th>" +
+                        "<th>Votos de la lista</th>" +
+                        "<th>Votos asignados</th>" +
+                        "</tr > ")
+
                     for (var i = 0, fila; fila = ListaFinal.sort((a, b) => (a.VotoFinal > b.VotoFinal) ? -1 : 1)[i]; i++) {
                         var style = "";
                         if (numeroEscanios > i) {
-                            style = "style='background-color:#FF7C71'"
+                            style = "style='background-color:#e6e0e0'"
+                            $("#resultadoPreliminar").append("<tr " + style + ">" +
+                                "<td>" + fila.Candidato.Nombre + "</td>" +
+                                "<td>" + fila.Candidato.Lista + "</td>" +
+                                "<td class='text-right'>" + fila.Candidato.Voto + "</td>" +
+                                "<td class='text-right'>" + fila.VotoLista + "</td>" +
+                                "<td class='text-right'>" + fila.VotoFinal + "</td>" +
+                                "</tr>");
                         }
-                        $("#resultado").append("<tr " + style +">" +
+                        if (numeroEscanios == i) {
+                            $("#resultado").append("<tr " +  ">" +
+                                "<td>&nbsp;" +  "</td>" +
+                                "<td>&nbsp;" +  "</td>" +
+                                "<td>&nbsp;" +  "</td>" +
+                                "<td>&nbsp;" +  "</td>" +
+                                "<td>&nbsp;" +  "</td>" +
+                                "</tr>");
+                        }
+                        $("#resultado").append("<tr " + style + ">" +
                             "<td>" + fila.Candidato.Nombre + "</td>" +
                             "<td>" + fila.Candidato.Lista + "</td>" +
-                            "<td>" + fila.Candidato.Voto + "</td>" +
-                            "<td>" + fila.VotoLista + "</td>" +
-                            "<td>" + fila.VotoFinal + "</td>" +
+                            "<td class='text-right'>" + fila.Candidato.Voto + "</td>" +
+                            "<td class='text-right'>" + fila.VotoLista + "</td>" +
+                            "<td class='text-right'>" + fila.VotoFinal + "</td>" +
                             /*
                             "<td>" + row.PARTIDOCORTO + "</td>" +
                             "<td>" + row.DISTRITO + "</td>" +
@@ -247,11 +296,11 @@
                             "</tr>");
                     }
                 });
-               
 
-               
 
-                
+
+
+
                 /*
                 var aux = new CandidatoFinal("Nombre", "Lista", "Partido", "Sigla", "Distrito", 2, 3, 4);
                 alert(aux.Candidato.Nombre);

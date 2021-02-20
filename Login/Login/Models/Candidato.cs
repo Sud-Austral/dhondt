@@ -12,6 +12,17 @@ namespace Login.Models
         public string PARTIDO { get; set; }
         public string  PARTIDOCORTO { get; set; }
         public string DISTRITO { get; set; }
+        public string GENERO { get; set; }
+
+        public Candidato(string nOMBRE, string lISTA, string pARTIDO, string pARTIDOCORTO, string dISTRITO, string gEnero)
+        {
+            NOMBRE = nOMBRE;
+            LISTA = lISTA;
+            PARTIDO = pARTIDO;
+            PARTIDOCORTO = pARTIDOCORTO;
+            DISTRITO = dISTRITO;
+            GENERO = gEnero;
+        }
 
         public Candidato(string nOMBRE, string lISTA, string pARTIDO, string pARTIDOCORTO, string dISTRITO)
         {
