@@ -21,7 +21,15 @@ namespace Login.Models
             PARTIDO = pARTIDO;
             PARTIDOCORTO = pARTIDOCORTO;
             DISTRITO = dISTRITO;
-            GENERO = gEnero;
+            if(gEnero == "M")
+            {
+                GENERO = "Mujer";
+            }
+            else
+            {
+                GENERO = "Hombre";
+            }
+            
         }
 
         public Candidato(string nOMBRE, string lISTA, string pARTIDO, string pARTIDOCORTO, string dISTRITO)

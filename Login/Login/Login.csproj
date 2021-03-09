@@ -231,6 +231,8 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <None Include="Properties\PublishProfiles\Simulacion - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\Simulacion - ReadOnly - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\Simulacion - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />

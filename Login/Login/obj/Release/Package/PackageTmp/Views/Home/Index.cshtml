@@ -68,22 +68,25 @@
 </div>
 
 <p id="texto"></p>
-<table class="table table-striped table-borderless" id="candidatosTable" style="width:100%;"></table>
+<table class="table table-striped table-borderless" id="candidatosTable" style="width:115%;"></table>
 <input type="button" value="Resultados" id="Calcular">
 <br>
 <br>
 <br>
-<table id="resultadoPreliminar" style="width:100%;" class=""></table>
+<p class="p-0 lead"  id="ConGenero"></p>
+<table id="resultadoPreliminar" style="width:115%;" class=""></table>
 <br>
 <br>
 <br>
-<table id="resultado" style="width:100%;" ></table>
+<p class="p-0 lead" id="SinGenero"></p>
+<table id="resultado" style="width:115%;" ></table>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
         class Candidato {
 
-            constructor(Nombre, Lista, Partido, Sigla, Distrito, Voto) {
+            constructor(Nombre, Lista, Partido, Sigla, Distrito, Voto, Genero) {
+                this.Genero = Genero;
                 this.Nombre = Nombre;
                 this.Lista = Lista;
                 this.Partido = Partido;
@@ -100,8 +103,8 @@
 
         class CandidatoFinal {
 
-            constructor(Nombre, Lista, Partido, Sigla, Distrito, Voto, VotoLista, VotoFinal) {
-                this.Candidato = new Candidato(Nombre, Lista, Partido, Sigla, Distrito, Voto);
+            constructor(Nombre, Lista, Partido, Sigla, Distrito, Voto, VotoLista, VotoFinal,Genero) {
+                this.Candidato = new Candidato(Nombre, Lista, Partido, Sigla, Distrito, Voto, Genero);
                 this.VotoLista = VotoLista;
                 this.VotoFinal = VotoFinal;
                 //alert(Voto);
@@ -141,6 +144,7 @@
                         "<th>Partido</th>" +
                         "<th>Sigla</th>" +
                         "<th>Distrito</th>" +
+                        "<th>Género</th>" +
                         "<th>Votos</th>" +
                         "</tr > ")
                     // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
@@ -151,6 +155,7 @@
                             "<td>" + row.PARTIDO + "</td>" +
                             "<td>" + row.PARTIDOCORTO + "</td>" +
                             "<td>" + row.DISTRITO + "</td>" +
+                            "<td>" + row.GENERO + "</td>" +
                             "<td> <input id='numero' type='number' min='0'> </td>" +
                             "</tr>")
                     });
@@ -161,6 +166,13 @@
 
         $(document).ready(function () {
             $("#Calcular").click(function () {
+                $("#resultadoPreliminar").empty();
+                $("#SinGenero").empty();
+                $("#ConGenero").empty();
+                $("#SinGenero")
+                    .append("Estos son los resultados preliminares considerando las coutas de género por distrito.");
+                $("#ConGenero")
+                    .append("Estos son los resultados preliminares sin establecer las coutas de género por distrito.");
                 var numeroEscanios = 0;
                 var distrito;
                 ListaCandidatos = [];
@@ -171,7 +183,7 @@
                 var indx = 0;
 
                 for (var i = 1, row; row = table.rows[i]; i++) {
-                    ListaCandidatos.push(new Candidato(row.cells[0].innerHTML, row.cells[1].innerHTML, row.cells[2].innerHTML, row.cells[3].innerHTML, row.cells[4].innerHTML, document.getElementsByTagName("input")[indx].value));
+                    ListaCandidatos.push(new Candidato(row.cells[0].innerHTML, row.cells[1].innerHTML, row.cells[2].innerHTML, row.cells[3].innerHTML, row.cells[4].innerHTML, document.getElementsByTagName("input")[indx].value, row.cells[5].innerHTML));
 
                     //alert(row.cells[0].innerHTML + row.cells[1].innerHTML + row.cells[2].innerHTML + row.cells[3].innerHTML + row.cells[4].innerHTML + document.getElementsByTagName("input")[indx].value)
                     if (Listas.indexOf(row.cells[1].innerHTML) == -1) {
@@ -240,7 +252,7 @@
                         for (var j = 0, fila2; fila2 = fila.Candidatos[j]; j++) {
                             //alert(fila2.Nombre)
                             //fila2.Voto = Math.round(fila.Votos / (j + 1));
-                            ListaFinal.push(new CandidatoFinal(fila2.Nombre, fila2.Lista, fila2.Partido, fila2.Sigla, fila2.Distrito, fila2.Voto, fila.Votos, Math.round(fila.Votos / (j + 1))));
+                            ListaFinal.push(new CandidatoFinal(fila2.Nombre, fila2.Lista, fila2.Partido, fila2.Sigla, fila2.Distrito, fila2.Voto, fila.Votos, Math.round(fila.Votos / (j + 1)), fila2.Genero));
                         }
                     }
 
@@ -261,16 +273,78 @@
                         "<th>Votos asignados</th>" +
                         "</tr > ")
 
+                    var ListaDesplegada = ListaFinal.sort((a, b) => (a.VotoFinal > b.VotoFinal) ? -1 : 1);
+                    //alert(Math.round(numeroEscanios / 2));
+                    //alert(ListaDesplegada[0].Candidato.Genero);
+                    var primerGenero = Math.round(numeroEscanios / 2);
+                    var segundoGenero = numeroEscanios - primerGenero;
+
+                    var ListaGenero = [];
+                    var iGenero = 0;
+                    var ListaDisponibles = ListaDesplegada.slice(0, numeroEscanios);
+
+                    var mujeres = ListaDisponibles.filter(element => element.Candidato.Genero == "Mujer");
+                    var hombres = ListaDisponibles.filter(element => element.Candidato.Genero == "Hombre");
+                    var numMujeres = mujeres.length;
+                    var numHombres = hombres.length;
+                    var TodoBien = true;
+                    var eliminar = 0;
+                    var genero = "";
+                    if (numMujeres >= numHombres) {
+                        if (numMujeres != primerGenero) {
+                            TodoBien = false;
+                            eliminar = segundoGenero - numHombres; 
+                            genero = "Hombre";
+                        }
+                    }
+                    else {
+                        if (numHombres != primerGenero) {
+                            TodoBien = false;
+                            eliminar = segundoGenero - numMujeres;
+                            genero = "Mujer";
+                        }
+                    }
+
+                    if (!TodoBien) {
+                        mujeres = ListaDesplegada.filter(element => element.Candidato.Genero == "Mujer");
+                        hombres = ListaDesplegada.filter(element => element.Candidato.Genero == "Hombre");
+
+                        if (genero == "Mujer") {
+                            hombres = hombres.slice(0, primerGenero);
+                            mujeres = mujeres.slice(0, segundoGenero);
+                        }
+                        else {
+                            hombres = hombres.slice(0, segundoGenero);
+                            mujeres = mujeres.slice(0, primerGenero)
+                        }
+                        ListaDisponibles = hombres.concat(mujeres);
+                        ListaDisponibles = ListaDisponibles.sort((a, b) => (a.VotoFinal > b.VotoFinal) ? -1 : 1);
+
+                    }
+                    while (primerGenero == 0 && segundoGenero == 0) {
+                        //var arr.slice([inicio[, fin]])
+                        //Verificar dentro de los primeros numeroEscanios si hay primerosGenero y segundoGenero 
+                        //Verificar cuantos faltan
+
+                        //Cambiar la cantidad de de sexo sobre representado por el sexo opuesto
+                        //Buscando los primeros sexos opuestos desde numeroEscanios +1 en adelante
+                        if (primerGenero > 0) {
+                            ListaGenero.push(ListaDesplegada[iGenero]);
+
+                        }
+                    }
+                    
+
                     for (var i = 0, fila; fila = ListaFinal.sort((a, b) => (a.VotoFinal > b.VotoFinal) ? -1 : 1)[i]; i++) {
                         var style = "";
                         if (numeroEscanios > i) {
                             style = "style='background-color:#e6e0e0'"
                             $("#resultadoPreliminar").append("<tr " + style + ">" +
-                                "<td>" + fila.Candidato.Nombre + "</td>" +
-                                "<td>" + fila.Candidato.Lista + "</td>" +
-                                "<td class='text-right'>" + fila.Candidato.Voto + "</td>" +
-                                "<td class='text-right'>" + fila.VotoLista + "</td>" +
-                                "<td class='text-right'>" + fila.VotoFinal + "</td>" +
+                                "<td>" + ListaDisponibles[i].Candidato.Nombre + "</td>" +
+                                "<td>" + ListaDisponibles[i].Candidato.Lista + "</td>" +
+                                "<td class='text-right'>" + ListaDisponibles[i].Candidato.Voto + "</td>" +
+                                "<td class='text-right'>" + ListaDisponibles[i].VotoLista + "</td>" +
+                                "<td class='text-right'>" + ListaDisponibles[i].VotoFinal + "</td>" +
                                 "</tr>");
                         }
                         if (numeroEscanios == i) {
